@@ -11,6 +11,7 @@ from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
 nltk.download('stopwords')
+nltk.download('vader_lexicon')
 def build_service():
     key="AIzaSyBqXBT8NagvV97tOA3sDq2vkj3JiVmGz_k"
     YOUTUBE_API_SERVICE_NAME = "youtube"
