@@ -10,6 +10,8 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
+from bs4 import BeautifulSoup
+import requests
 nltk.download('stopwords')
 nltk.download('vader_lexicon')
 def build_service():
@@ -117,7 +119,30 @@ def _convert_score_to_sentiment(score) -> str:
         sentiment = "Positive"
 
     return sentiment
+def get_video_info(video_id):
+    try:
+        youtube=build_service()
+        video_response = youtube.videos().list(
+            part='snippet',
+            id=video_id
+        ).execute()
 
+        video_item = video_response['items'][0]
+        video_title = video_item['snippet']['title']
+        channel_id = video_item['snippet']['channelId']
+
+        channel_response = youtube.channels().list(
+            part='snippet',
+            id=channel_id
+        ).execute()
+
+        channel_item = channel_response['items'][0]
+        channel_name = channel_item['snippet']['title']
+
+        return video_title, channel_name
+    except Exception as e:
+        print(f"Error: {e}")
+        return None, None
 
 def main():
     st.set_page_config(page_title="Youtube Comments Sentiment Analysis",page_icon="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/YouTube_social_white_square_%282017%29.svg/1200px-YouTube_social_white_square_%282017%29.svg.png",layout="centered")
@@ -130,6 +155,9 @@ def main():
     if submitted:
         # comments=get_comments(video_id)
         # st.write(comments)
+        video_title, channel_name = get_video_info(videoId)
+        st.subheader(video_title)
+        st.write(channel_name)
         part='snippet'
         maxResults=100
         textFormat='plainText'
@@ -247,12 +275,4 @@ def main():
         st.write(res_pos.head(100))
         st.subheader("Most Negative Comments")
         st.write(res_neg.head(100))
-
-
-
-
-        
-
-
-    
 main()
