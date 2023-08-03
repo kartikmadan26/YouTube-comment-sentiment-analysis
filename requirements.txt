@@ -7,5 +7,6 @@ urllib3==1.26.14
 matplotlib==3.7.1
 matplotlib-inline==0.1.6
 google-api-python-client==2.95.0
+wordcloud==1.9.2
 beautifulsoup4
 
