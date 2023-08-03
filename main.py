@@ -10,7 +10,10 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+except :
+    from BeautifulSoup import BeautifulSoup 
 import requests
 nltk.download('stopwords')
 nltk.download('vader_lexicon')
