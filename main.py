@@ -10,6 +10,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import matplotlib.pyplot as plt
+from wordcloud import WordCloud
 try:
     from bs4 import BeautifulSoup
 except :
@@ -148,6 +149,7 @@ def get_video_info(video_id):
         return None, None
 
 def main():
+    st.set_option('deprecation.showPyplotGlobalUse', False)
     st.set_page_config(page_title="Youtube Comments Sentiment Analysis",page_icon="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/YouTube_social_white_square_%282017%29.svg/1200px-YouTube_social_white_square_%282017%29.svg.png",layout="centered")
     st.title("Youtube Comments Sentiment Analysis")
     
@@ -267,7 +269,6 @@ def main():
             ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
             st.pyplot(fig1)
         df_pos=df.loc[df["Sentiment"]=="Positive"]
-        # df_pos.reset_index(inplace = True)
         res_pos=df_pos.sort_values(by="Sentiment Score",ascending=False)
         # res_pos.reset_index(inplace = True)
         df_neg=df.loc[df["Sentiment"]=="Negative"]
@@ -276,6 +277,14 @@ def main():
         # res_neg.reset_index(inplace = True)
         st.subheader("Most Positive Comments")
         st.write(res_pos.head(100))
+        st.subheader("Most Positive Words")
+        pos_text=" ".join(word for word in df_pos['comments'])
+        word_cloud2 = WordCloud( background_color = 'white').generate(pos_text)
+        st.image(word_cloud2.to_array())
         st.subheader("Most Negative Comments")
         st.write(res_neg.head(100))
+        st.subheader("Most Negative Words")
+        neg_text=" ".join(word for word in df_neg['comments'])
+        word_cloud1 = WordCloud( background_color = 'white').generate(neg_text)
+        st.image(word_cloud1.to_array())
 main()
